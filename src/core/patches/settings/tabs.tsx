@@ -1,12 +1,12 @@
-import { connectComponent } from '@api/settings';
 import { Locale, NavigationNative, React } from '@metro/common';
+import HeaderRight from '@screens/partials/HeaderRight';
+import { connectComponent } from '@api/settings';
+import Page from "@screens/partials/DataPage";
+import { getIDByName } from '@api/assets';
+import Enmity from "@screens/Enmity";
 import { getByProps } from '@metro';
 import { create } from '@patcher';
 
-import Enmity from "@screens/Enmity";
-import Page from "@screens/partials/DataPage";
-import HeaderRight from '@screens/partials/HeaderRight';
-import { getIDByName } from '@api/assets';
 
 const Patcher = create('enmity-settings-tabs');
 

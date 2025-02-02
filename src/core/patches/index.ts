@@ -1,9 +1,11 @@
-import settings from './settings';
+import fixconnecting from './fix-connection';
 import tracking from './no-track';
+import settings from './settings';
 import inspect from './inspect';
+import toasts from './toasts';
 import badges from './badges';
 import theme from './theme';
-import toasts from './toasts';
+
 
 const handlePatch = (patchType: string, patch: () => any | void) => {
     try {
@@ -20,7 +22,8 @@ export function initialize(): void {
         tracking,
         badges,
         theme,
-        toasts
+        toasts,
+        fixconnecting
     }
 
     Object.entries(patches).forEach(entry => handlePatch(...entry));
