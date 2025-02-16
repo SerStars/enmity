@@ -1,16 +1,16 @@
 import { FormArrow, FormDivider, FormRow, FormSection } from '@components';
-import { connectComponent } from '@api/settings';
 import { Locale, NavigationNative, Scenes, React } from '@metro/common';
+import HeaderRight from '@screens/partials/HeaderRight';
+import PluginIcon from '@screens/partials/PluginIcon';
+import ThemeIcon from '@screens/partials/ThemeIcon';
+import { connectComponent } from '@api/settings';
+import Page from "@screens/partials/DataPage";
 import { findInReactTree } from '@utilities';
+import Enmity from "@screens/Enmity";
+import { build } from '@api/native';
 import { getByName } from '@metro';
 import { create } from '@patcher';
 
-import Enmity from "@screens/Enmity";
-import Page from "@screens/partials/DataPage";
-import HeaderRight from '@screens/partials/HeaderRight';
-import ThemeIcon from '@screens/partials/ThemeIcon';
-import PluginIcon from '@screens/partials/PluginIcon';
-import { build } from '@api/native';
 
 const Patcher = create('enmity-settings-panels');
 
@@ -20,44 +20,47 @@ export default function (): void {
 }
 
 function patchScreens() {
-	Patcher.after(Scenes, 'default', (_, __, res) => {
-		return {
-			...res,
-			Enmity: {
-				key: 'Enmity',
-				title: 'Enmity',
-				render: connectComponent(Enmity, 'enmity')
-			},
-			EnmityPlugins: {
-				key: 'EnmityPlugins',
-				title: 'Plugins',
-				render: () => <Page type={"plugin"} />,
-				headerRight: () => <HeaderRight type={"plugin"} />
-			},
-			EnmityThemes: {
-				key: 'EnmityThemes',
-				title: 'Themes',
-				render: () => <Page type={"theme"} />,
-				headerRight: () => <HeaderRight type={"theme"} />
-			},
-			EnmityCustomPage: {
-				key: 'EnmityCustomPage',
-				title: 'Page',
-				render: ({ pageName, pagePanel }: { pageName: string, pagePanel: React.ComponentType; }) => {
-					const navigation = NavigationNative.useNavigation();
-					const Component = pagePanel;
+	try {
+		Patcher.after(Scenes, 'default', (_, __, res) => {
+			return {
+				...res,
+				Enmity: {
+					key: 'Enmity',
+					title: 'Enmity',
+					render: connectComponent(Enmity, 'enmity')
+				},
+				EnmityPlugins: {
+					key: 'EnmityPlugins',
+					title: 'Plugins',
+					render: () => <Page type={"plugin"} />,
+					headerRight: () => <HeaderRight type={"plugin"} />
+				},
+				EnmityThemes: {
+					key: 'EnmityThemes',
+					title: 'Themes',
+					render: () => <Page type={"theme"} />,
+					headerRight: () => <HeaderRight type={"theme"} />
+				},
+				EnmityCustomPage: {
+					key: 'EnmityCustomPage',
+					title: 'Page',
+					render: ({ pageName, pagePanel }: { pageName: string, pagePanel: React.ComponentType; }) => {
+						const navigation = NavigationNative.useNavigation();
+						const Component = pagePanel;
 
-					React.useEffect(() => {
-						if (pageName) {
-							navigation.setOptions({ title: pageName });
-						}
-					}, []);
+						React.useEffect(() => {
+							if (pageName) {
+								navigation.setOptions({ title: pageName });
+							}
+						}, []);
 
-					return <Component />;
+						return <Component />;
+					}
 				}
-			}
-		};
-	});
+			};
+		});
+	}
+	catch {}
 }
 
 function patchSettings() {
