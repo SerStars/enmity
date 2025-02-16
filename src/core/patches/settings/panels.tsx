@@ -20,47 +20,44 @@ export default function (): void {
 }
 
 function patchScreens() {
-	try {
-		Patcher.after(Scenes, 'default', (_, __, res) => {
-			return {
-				...res,
-				Enmity: {
-					key: 'Enmity',
-					title: 'Enmity',
-					render: connectComponent(Enmity, 'enmity')
-				},
-				EnmityPlugins: {
-					key: 'EnmityPlugins',
-					title: 'Plugins',
-					render: () => <Page type={"plugin"} />,
-					headerRight: () => <HeaderRight type={"plugin"} />
-				},
-				EnmityThemes: {
-					key: 'EnmityThemes',
-					title: 'Themes',
-					render: () => <Page type={"theme"} />,
-					headerRight: () => <HeaderRight type={"theme"} />
-				},
-				EnmityCustomPage: {
-					key: 'EnmityCustomPage',
-					title: 'Page',
-					render: ({ pageName, pagePanel }: { pageName: string, pagePanel: React.ComponentType; }) => {
-						const navigation = NavigationNative.useNavigation();
-						const Component = pagePanel;
+	Patcher.after(Scenes, 'default', (_, __, res) => {
+		return {
+			...res,
+			Enmity: {
+				key: 'Enmity',
+				title: 'Enmity',
+				render: connectComponent(Enmity, 'enmity')
+			},
+			EnmityPlugins: {
+				key: 'EnmityPlugins',
+				title: 'Plugins',
+				render: () => <Page type={"plugin"} />,
+				headerRight: () => <HeaderRight type={"plugin"} />
+			},
+			EnmityThemes: {
+				key: 'EnmityThemes',
+				title: 'Themes',
+				render: () => <Page type={"theme"} />,
+				headerRight: () => <HeaderRight type={"theme"} />
+			},
+			EnmityCustomPage: {
+				key: 'EnmityCustomPage',
+				title: 'Page',
+				render: ({ pageName, pagePanel }: { pageName: string, pagePanel: React.ComponentType; }) => {
+					const navigation = NavigationNative.useNavigation();
+					const Component = pagePanel;
 
-						React.useEffect(() => {
-							if (pageName) {
-								navigation.setOptions({ title: pageName });
-							}
-						}, []);
+					React.useEffect(() => {
+						if (pageName) {
+							navigation.setOptions({ title: pageName });
+						}
+					}, []);
 
-						return <Component />;
-					}
+					return <Component />;
 				}
-			};
-		});
-	}
-	catch {}
+			}
+		};
+	});
 }
 
 function patchSettings() {
